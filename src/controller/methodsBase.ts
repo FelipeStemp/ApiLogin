@@ -3,6 +3,8 @@ import { User } from "../model/user";
 
 export const getUsers = () => User.find({})
 
+export const getUserById = (id: string) => User.findOneById(id)
+
 export const getUserEmail = async (email: string) => {
   if(email){
     return await User.findOne({email}).exec();
