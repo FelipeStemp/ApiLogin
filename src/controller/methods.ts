@@ -57,11 +57,11 @@ export const postLogin = async (Request: express.Request, Response: express.Resp
       return Response.status(400).json({error: "Senha incorreta"})
     }
 
-    const token = jwt.sign({email}, process.env.JWT_SECRET, {
+    const token = jwt.sign({email}, process.env.JWT_SECRET as string, {
       expiresIn: process.env.JWT_EXPIRES_IN
     });
 
-    return Response.status(200).json()
+    return Response.status(200).json({token})
 
   }catch(error){
     return Response.status(500).json(error)
