@@ -15,18 +15,20 @@ export const getAllUsers = async (Request: express.Request, Response: express.Re
   }
 }
 
-export const postCreateUser = async (Request: express.Request, Response: express.Response) => {
+export const postCreateUser = async (Request: express.Request, Response: express.Response): Promise<void> => {
   try {
     const { name, email, senha } = Request.body;
 
     if (!name || !email || !senha) {
-      return Response.status(400).json({ error: 'Informar todos os dados solicitados' })
+      Response.status(400).json({ error: 'Informar todos os dados solicitados' })
+      return 
     }
 
     const existEmail = await getUserEmail(email)
 
     if (existEmail) {
-      return Response.status(400).json({ error: 'Email já cadastrado' })
+      Response.status(400).json({ error: 'Email já cadastrado' })
+      return 
     }
 
     const HashPass = await bcrypt.hash(senha, 10);
@@ -37,35 +39,41 @@ export const postCreateUser = async (Request: express.Request, Response: express
       password: HashPass
     })
 
-    return Response.status(201).json(User)
+    Response.status(201).json(User)
+    return 
 
   } catch (error) {
-    return Response.status(500).json(error)
+    Response.status(500).json(error)
+    return 
   }
 }
 
-export const postLogin = async (Request: express.Request, Response: express.Response) => {
+export const postLogin = async (Request: express.Request, Response: express.Response): Promise<void> =>  {
   try {
     const { email, senha } = Request.body;
 
     const user = await getUserEmail(email);
     if (!user) {
-      return Response.status(404).json({ error: "Usuario não localizado" })
+      Response.status(404).json({ error: "Usuario não localizado" })
+      return 
     }
 
     const passValid = await bcrypt.compare(senha, user.password);
     if (!passValid) {
-      return Response.status(400).json({ error: "Senha incorreta" })
+      Response.status(400).json({ error: "Senha incorreta" })
+      return 
     }
-
-    const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
+    
+     /* const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
       expiresIn: process.env.JWT_EXPIRES_IN
-    });
+    });  */
 
-    return Response.status(200).json({ token })
+    Response.status(200).json(user)
+    return 
 
   } catch (error) {
-    return Response.status(500).json(error)
+    Response.status(500).json(error)
+    return 
   }
 }
 

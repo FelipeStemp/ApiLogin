@@ -9,7 +9,6 @@ export const verifyJwt = (req: Request, res: Response, next: NextFunction): void
     res.status(403).json({ error: "Token não fornecido" });
     return;
   }
-
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : authHeader;
 
   jwt.verify(token, process.env.JWT_SECRET as string, (error, decoded) => {
