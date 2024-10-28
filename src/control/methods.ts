@@ -64,11 +64,11 @@ export const postLogin = async (Request: express.Request, Response: express.Resp
       return 
     }
     
-     /* const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
+    const token = jwt.sign({  userId: user._id, email: user.email  }, process.env.JWT_SECRET as string, {
       expiresIn: process.env.JWT_EXPIRES_IN
-    });  */
+    });
 
-    Response.status(200).json(user)
+    Response.status(200).json({token})
     return 
 
   } catch (error) {
