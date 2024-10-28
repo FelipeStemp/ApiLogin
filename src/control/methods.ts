@@ -68,7 +68,7 @@ export const postLogin = async (Request: express.Request, Response: express.Resp
       expiresIn: process.env.JWT_EXPIRES_IN
     });
 
-    Response.status(200).json({token})
+    Response.status(200).json({userId: user._id, token})
     return 
 
   } catch (error) {
